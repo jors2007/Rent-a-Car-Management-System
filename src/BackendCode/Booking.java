@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author @AbdullahShahid01
  */
-public class Booking implements Serializable {
+public class Booking implements Persistable, Serializable {
 
     private int ID;
     private Customer customer;
