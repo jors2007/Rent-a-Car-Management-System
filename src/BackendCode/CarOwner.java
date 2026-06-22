@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class CarOwner extends Person implements Serializable {
+public class CarOwner extends Person implements Persistable, Serializable {
 
     private int Balance; // increases after every HOUR when Owner's car(s) is booked
 

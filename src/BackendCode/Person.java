@@ -43,9 +43,8 @@ public abstract class Person implements Serializable {
     public void setContact_No(String Contact_No) {
         this.Contact_No = Contact_No;
     }
-    public abstract void Add();
-    public abstract void Update();
-    public abstract void Remove();
+    // Persistence operations were moved to the Persistable interface to
+    // separate domain model (Person) from persistence concerns (ISP, SRP).
     @Override
     public String toString() {
         return "Person_new{" + "ID=" + ID + ", CNIC=" + CNIC + ", Name=" + Name + ", Contact_No=" + Contact_No + '}';

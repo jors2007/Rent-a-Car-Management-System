@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author @AbdullahShahid01
  */
-public class Customer extends Person implements Serializable {
+public class Customer extends Person implements Persistable, Serializable {
 
     private int Bill; // increases after every HOUR when a customers has Booked car(s)
 
