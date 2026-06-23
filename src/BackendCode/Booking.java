@@ -21,8 +21,11 @@ public class Booking implements Persistable, Serializable {
     private Customer customer;
     private Car car;
     private long RentTime, ReturnTime; // stores System time when the Book() method is called
+    // Strategy for calculating fares — use composition to respect LSP
+    private transient FareCalculator fareCalculator;
 
     public Booking() {
+        this.fareCalculator = new DefaultFareCalculator();
     }
 
     public Booking(int ID, Customer customer, Car car, long RentTime, long ReturnTime) {
@@ -31,6 +34,7 @@ public class Booking implements Persistable, Serializable {
         this.car = car;
         this.RentTime = RentTime;
         this.ReturnTime = ReturnTime;
+        this.fareCalculator = new DefaultFareCalculator();
     }
 
     public int getID() {
@@ -184,18 +188,23 @@ public class Booking implements Persistable, Serializable {
     }
 
     public int calculateBill() {
-        // rent calculation
-        long rentTime = this.getRentTime();
-        long returnTime = this.getReturnTime();
-        long totalTime = returnTime - rentTime;
-        totalTime = totalTime / (1000 * 60 * 60);
-
-        int rentPerHour = this.getCar().getRentPerHour();
-        if (totalTime != 0) {
-            return (int) (rentPerHour * totalTime);
-        } else {
-            return rentPerHour;
+        // Delegate fare calculation to the configured FareCalculator.
+        // If the calculator is null (e.g. after deserialization), use default.
+        if (this.fareCalculator == null) {
+            this.fareCalculator = new DefaultFareCalculator();
         }
+        return this.fareCalculator.calculate(this.getCar(), this.getRentTime(), this.getReturnTime());
+    }
+
+    public FareCalculator getFareCalculator() {
+        if (this.fareCalculator == null) {
+            this.fareCalculator = new DefaultFareCalculator();
+        }
+        return this.fareCalculator;
+    }
+
+    public void setFareCalculator(FareCalculator fareCalculator) {
+        this.fareCalculator = fareCalculator;
     }
 
     public static ArrayList<Booking> SearchByCustomerID(int CustomerID) {
